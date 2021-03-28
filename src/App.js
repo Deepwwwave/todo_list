@@ -10,7 +10,8 @@ export default class App extends React.Component {
       items : [
         {text: "learn react", key: Date.now }
       ],
-      input: ''
+      input: '',
+      placeholder:'Enter task'
     }
   }
 
@@ -21,26 +22,52 @@ export default class App extends React.Component {
   }
 
   // Méthode qui enregistre la saisie du formulaire dans la variable items du state
-  add =()=>{
-
+  add = () =>{
+    if (this.state.input === '') {
+      this.setState({
+        placeholder:'You need to write an task'}
+        
+      )
+      return
+    }
     let newItem = {text: this.state.input, key: Date.now()
     }
     this.setState(state => ({
-      items: [newItem].concat(state.items)
+      items: [newItem].concat(state.items),
+      input: '',
+      placeholder: 'Enter task'
     }))
   }
  
+  Delete = (key) => {
+    let filtered = this.state.items.filter(item => {
+      if (key !== item.key) { 
+        return item 
+      }
+    })
+    this.setState({
+      items : filtered,
+      placeholder : 'Enter task'
+    })
+  }
+
+
   render() {
     return (
       <div id="container">
         <div className="todoListMain">
           <div className="header">
             <form onSubmit = {(e) => {e.preventDefault() ; this.add() }}>
-              <input placeholder="enter task" className="rounded" onChange = { (e) => this.handleChange(e)}/>
+              <input 
+              placeholder={this.state.placeholder} 
+              className="rounded text-left"
+              value = {this.state.input}
+              onChange = { (e) => this.handleChange(e)}
+              />
               <button className="rounded">add</button>
-              <ul>
+              <ul className ="theList">
                 {this.state.items.map(item => {
-                  return(<li key={item.key}>{item.text}</li>)
+                  return(<li key={item.key} onClick={ () => this.Delete(item.key)} >{item.text}</li>)
                 })}
               </ul>
             </form>
