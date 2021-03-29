@@ -37,6 +37,7 @@ export default class App extends React.Component {
       input: '',
       placeholder: 'Enter task'
     }))
+    localStorage.setItem('items',JSON.stringify(this.state.items))
   }
  
   Delete = (key) => {
